@@ -49,9 +49,12 @@
     <Compile Include="Barrier\Mountain.cs" />
     <Compile Include="AquaAnimal\Dolphin.cs" />
     <Compile Include="Barrier\Rock.cs" />
+    <Compile Include="BuilderProvider.cs" />
+    <Compile Include="Global\EntityFactory.cs" />
     <Compile Include="Global\Gender.cs" />
     <Compile Include="Global\IAquaCreature.cs" />
     <Compile Include="Global\IBarrier.cs" />
+    <Compile Include="Global\IEntity.cs" />
     <Compile Include="Global\IFlyingCreature.cs" />
     <Compile Include="Global\IGroundCreature.cs" />
     <Compile Include="Global\RandomHolder.cs" />

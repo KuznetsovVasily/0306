@@ -18,6 +18,11 @@ namespace NatureSimulationGen2.Global
             Y = y;
             IsBarrier = GetBarrier();
         }
+
+
+
+
+
         //switch (type)
         //{
         //    case Owl:

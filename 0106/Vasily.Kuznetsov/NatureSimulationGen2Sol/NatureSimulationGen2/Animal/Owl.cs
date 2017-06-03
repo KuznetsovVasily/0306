@@ -13,7 +13,7 @@ namespace NatureSimulationGen2.Animal
         protected static int RandomDelta { get; set; }
         protected int Timer { get; set; }
 
-        public Owl(int x, int y, Gender gender)
+        public Owl(int x, int y, Gender gender = Gender.Male)
             : base(x, y, gender)
         {
         }

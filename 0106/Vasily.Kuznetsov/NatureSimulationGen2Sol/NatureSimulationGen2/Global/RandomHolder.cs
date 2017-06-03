@@ -23,5 +23,15 @@ namespace NatureSimulationGen2.Global
         {
             return _instance ?? (_instance = new RandomHolder());
         }
+
+        public int GetRandomX(World world)
+        {
+            return GetInstance().Random.Next(1, world.XWorldMax - 1);
+        }
+
+        public int GetRandomY(World world)
+        {
+            return GetInstance().Random.Next(1, world.YWorldMax - 1);
+        }
     }
 }
