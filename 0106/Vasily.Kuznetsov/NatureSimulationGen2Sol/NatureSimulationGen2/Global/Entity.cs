@@ -18,28 +18,6 @@ namespace NatureSimulationGen2.Global
             Y = y;
             IsBarrier = GetBarrier();
         }
-
-
-
-
-
-        //switch (type)
-        //{
-        //    case Owl:
-        //        if (RandomHolder.GetInstance().Random.Next(2) == 1)
-        //        {
-        //            return new Owl(RandomHolder.GetInstance().Random.Next(1, 15),
-        //                RandomHolder.GetInstance().Random.Next(1, 15));
-        //        }
-        //        return new Owl(RandomHolder.GetInstance().Random.Next(1, 15),
-        //            RandomHolder.GetInstance().Random.Next(1, 15), 1, Gender.Female);
-        //    case Rabbit:
-        //        if (RandomHolder.GetInstance().Random.Next(2) == 1)
-        //        {
-
-        //        }
-        //    default:
-        //        throw new Exception("Incorrect Entity Code");
         public abstract Intention RequestIntention(World world);
         public abstract List<SurfaceType> GetSurface();
         public abstract bool GetBarrier();

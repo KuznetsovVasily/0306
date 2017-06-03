@@ -7,7 +7,8 @@ using NatureSimulationGen2.AquaAnimal;
 using NatureSimulationGen2.Barrier;
 using NatureSimulationGen2.Global;
 using NatureSimulationGen2.Plant;
-
+using NatureSimulationGen2.Global.Initialize;
+using NatureSimulationGen2.Builder;
 
 namespace NatureSimulationGen2
 {
@@ -15,18 +16,15 @@ namespace NatureSimulationGen2
     {
         static void Main(string[] args)
         {
-            World world = new World(15, 15);
-            Rock rock = new Rock(1, 1);
-            //
-            
-            //
-            world.AddEntity(rock);
-            Rabbit rabbizt = new Rabbit(2, 2, Gender.Male);
-            world.AddEntity(rabbizt);
-            Dolphin dolpz = new Dolphin(3, 3, Gender.Male);
-            world.AddEntity(dolpz);
-            Owl owlzed = new Owl(4, 4, Gender.Female);
-            world.AddEntity(owlzed);
+            BuilderProvider builderProvider = new BuilderProvider();
+            builderProvider
+           //.Register(typeof(Owl), new OwlBuilder())
+           //.Register(typeof(Rabbit), new RabbitBuilder()
+           .Register(typeof(Owl), new LikeOwlBuilder());
+           
+            World world = new World(15, 15, builderProvider);
+            world = new TestWorldInitializer().InitializeWorld(world, builderProvider);
+            world = new ManualInitializer().InitializeWorld(world, builderProvider);
 
 
             //            //I can get type on world with coord 2.2
@@ -71,7 +69,7 @@ namespace NatureSimulationGen2
             //            world.UpkeepTurn();
             //            world.Turn();
 
-            //            //world.RenderingMap();
+        
 
             //            //Owl will move in a random Direction
             //            if (owl.X == 7 && owl.Y == 4)

@@ -15,11 +15,18 @@ namespace NatureSimulationGen2.Global
     {
         public int XWorldMax { get; set; }
         public int YWorldMax { get; set; }
-        public World(int xWorldMax, int yWorldMax)
+        private BuilderProvider builderProvider;
+
+        public World(int xWorldMax, int yWorldMax, BuilderProvider builderProvider)
         {
             XWorldMax = xWorldMax - 1;
             YWorldMax = yWorldMax - 1;
+            this.builderProvider = builderProvider;
         }
+
+       
+        
+
         public List<Entity> EntityList = new List<Entity>();
         public Dictionary<Tuple<int, int>, SurfaceType> groundTypes = new Dictionary<Tuple<int, int>, SurfaceType>();
         public SurfaceType GetSurfaceTypeAt(int x, int y)
@@ -71,93 +78,6 @@ namespace NatureSimulationGen2.Global
             return EntityList.Where(entity => entity.X == x && entity.Y == y);
         }
 
-        public void RenderingMap()
-        {
-            CreateWater(9);
-            var waterPerc = (XWorldMax * YWorldMax * 45 / 100);
-            while (groundTypes.Count < waterPerc)
-            {
-                CreateWater();
-            }
-
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(XWorldMax * YWorldMax); i++)
-            {
-                int randXOwl = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYOwl = RandomHolder.GetInstance().Random.Next(1, 15);
-                Owl owl;
-                if (RandomHolder.GetInstance().Random.Next(0, 1) == 1)
-                {
-                    owl = new Owl(randXOwl, randYOwl, Gender.Male);
-                    AddEntity(owl);
-                }
-                owl = new Owl(randXOwl, randYOwl, Gender.Female);
-                AddEntity(owl);
-            }
-
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(XWorldMax * YWorldMax / 3); i++)
-            {
-                int randXRabbit = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYRabbit = RandomHolder.GetInstance().Random.Next(1, 15);
-                Rabbit rabbit;
-                if (RandomHolder.GetInstance().Random.Next(0, 1) == 1)
-                {
-                    rabbit = new Rabbit(randXRabbit, randYRabbit, Gender.Male);
-                    AddEntity(rabbit);
-                }
-                rabbit = new Rabbit(randXRabbit, randYRabbit, Gender.Female);
-                AddEntity(rabbit);
-            }
-
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(XWorldMax * YWorldMax * 70 / 100); i++)
-            {
-                int randXDolphin = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYDolphin = RandomHolder.GetInstance().Random.Next(1, 15);
-                Dolphin dolphin;
-                if (RandomHolder.GetInstance().Random.Next(0, 1) == 1)
-                {
-                    dolphin = new Dolphin(randXDolphin, randYDolphin, Gender.Male);
-                    AddEntity(dolphin);
-                }
-                dolphin = new Dolphin(randXDolphin, randYDolphin, Gender.Female);
-                AddEntity(dolphin);
-            }
-
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(8); i++)
-            {
-                int randXRock = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYRock = RandomHolder.GetInstance().Random.Next(1, 15);
-                Rock rock = new Rock(randXRock, randYRock);
-                AddEntity(rock);
-            }
-
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(XWorldMax * YWorldMax * 4); i++)
-            {
-                int randXTree = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYTree = RandomHolder.GetInstance().Random.Next(1, 15);
-
-                if (!groundTypes.ContainsKey(Tuple.Create(randXTree, randYTree)) && EntityList.Any(e => e.GetType() == typeof(Mountain))) 
-                {
-                    Tree tree = new Tree(randXTree, randYTree);
-                    AddEntity(tree);
-                }
-            }
-        }
-        public void CreateWater(int range = 5)
-        {
-            int randXWaterStart = RandomHolder.GetInstance().Random.Next(1, 15);
-            int randYWaterStart = RandomHolder.GetInstance().Random.Next(1, 15);
-            var perimetr = RandomHolder.GetInstance().Random.Next(range);
-
-            for (int i = (randXWaterStart - perimetr / 2); i < (randXWaterStart + perimetr / 2) && i > 0 && i < XWorldMax; i++)
-            {
-                for (int j = (randYWaterStart - perimetr / 2); j < (randYWaterStart + perimetr / 2) && j > 0 && j < YWorldMax; j++)
-                {
-                    SetSurfaceType(SurfaceType.Water, i, j);
-                    GetSurfaceTypeAt(i, j);
-                }
-            }
-        }
-
         public void UpkeepTurn()
         {
             EntityList = (from element in EntityList
@@ -188,7 +108,7 @@ namespace NatureSimulationGen2.Global
                         {
                             EntityList[i].X += entityIntention.DeltaX;
                             EntityList[i].Y += entityIntention.DeltaY;
-                            Thread.Sleep(100);
+                            
                         }
                     }
                     
@@ -196,7 +116,7 @@ namespace NatureSimulationGen2.Global
                     {
                         EntityList[i].X += entityIntention.DeltaX;
                         EntityList[i].Y += entityIntention.DeltaY;
-                        Thread.Sleep(100);
+                        
                     }
                     
                     
@@ -204,7 +124,7 @@ namespace NatureSimulationGen2.Global
                     {
                         EntityList[i].X += entityIntention.DeltaX;
                         EntityList[i].Y += entityIntention.DeltaY;
-                        Thread.Sleep(100);
+                        
                     }
                 }
             }

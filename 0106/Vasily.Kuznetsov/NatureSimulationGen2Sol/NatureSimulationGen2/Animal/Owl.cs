@@ -12,10 +12,12 @@ namespace NatureSimulationGen2.Animal
     {
         protected static int RandomDelta { get; set; }
         protected int Timer { get; set; }
+        public bool Predator { get; set; }
 
-        public Owl(int x, int y, Gender gender = Gender.Male)
+        public Owl(int x, int y, Gender gender = Gender.Male, bool predator = true)
             : base(x, y, gender)
         {
+            Predator = predator;
         }
 
         public override Intention RequestIntention(World world)
@@ -63,8 +65,13 @@ namespace NatureSimulationGen2.Animal
         }
         protected override int GetHealth()
         {
-            return 5;
+            return this.Health;
         }
+        public void SetHealth(int health)
+        {
+            this.Health = health;
+        }
+
         protected override bool GetEdibility()
         {
             return false;
