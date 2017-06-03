@@ -9,20 +9,17 @@ namespace NatureSimulationGen2
     public class BuilderProvider
     {
         private Dictionary<Type, IEntityBuilder> builderRegistry = new Dictionary<Type, IEntityBuilder>();
-            
-
 
         public void Register(Type entityType, IEntityBuilder builder)
         {
             if (builderRegistry.ContainsKey(entityType))
             {
-                throw new Exception();
+                throw new BuilderAlreadyRegisteredException(string.Format("Builder for class {0} already registered ", entityType.Name));
             }
             else
             {
-
+                builderRegistry[entityType] = builder;
             }
-
         }
     }
 }
@@ -30,4 +27,12 @@ namespace NatureSimulationGen2
 public interface IEntityBuilder
 {
 
+}
+
+public class BuilderAlreadyRegisteredException : Exception
+{
+    public BuilderAlreadyRegisteredException(string message)
+        :base(message)
+    {
+    }
 }
