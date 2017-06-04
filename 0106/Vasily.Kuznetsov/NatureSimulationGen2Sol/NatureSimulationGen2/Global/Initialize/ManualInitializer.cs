@@ -45,40 +45,50 @@ namespace NatureSimulationGen2.Global.Initialize
             
             }
 
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(world.XWorldMax * world.YWorldMax / 3); i++)
+            for (int i = 0; i < 5; i++)
             {
-                int randXRabbit = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYRabbit = RandomHolder.GetInstance().Random.Next(1, 15);
-                Rabbit rabbit;
-                if (RandomHolder.GetInstance().Random.Next(0, 1) == 1)
+                int randXRabbit = RandomHolder.GetInstance().Random.Next(1, world.XWorldMax);
+                int randYRabbit = RandomHolder.GetInstance().Random.Next(1, world.YWorldMax);
+                if (RandomHolder.GetInstance().Random.Next(0, 2) == 1)
                 {
-                    rabbit = new Rabbit(randXRabbit, randYRabbit, Gender.Male);
+                    var rabbitBuilder = ((RabbitBuilder)builderProvider.GetBuilder(typeof(Rabbit)))
+                                    .SetCoordinates(randXRabbit, randYRabbit)
+                                    .SetGender(Gender.Male);
+                    var rabbit = rabbitBuilder.Build();
                     world.AddEntity(rabbit);
                 }
-                rabbit = new Rabbit(randXRabbit, randYRabbit, Gender.Female);
-                world.AddEntity(rabbit);
-            }
+                else
+                {
+                    var rabbitBuilder = ((RabbitBuilder)builderProvider.GetBuilder(typeof(Rabbit)))
+                                    .SetCoordinates(randXRabbit, randYRabbit)
+                                    .SetGender(Gender.Female);
+                    var rabbit = rabbitBuilder.Build();
+                    world.AddEntity(rabbit);
+                }
 
+            }
+            
             for (int i = 0; i < RandomHolder.GetInstance().Random.Next(world.XWorldMax * world.YWorldMax * 70 / 100); i++)
             {
                 int randXDolphin = RandomHolder.GetInstance().Random.Next(1, 15);
                 int randYDolphin = RandomHolder.GetInstance().Random.Next(1, 15);
-                Dolphin dolphin;
-                if (RandomHolder.GetInstance().Random.Next(0, 1) == 1)
+
+                if (RandomHolder.GetInstance().Random.Next(0, 2) == 1)
                 {
-                    dolphin = new Dolphin(randXDolphin, randYDolphin, Gender.Male);
+                    var dolphinBuilder = ((RabbitBuilder)builderProvider.GetBuilder(typeof(Rabbit)))
+                                    .SetCoordinates(randXDolphin, randYDolphin)
+                                    .SetGender(Gender.Male);
+                    var dolphin = dolphinBuilder.Build();
                     world.AddEntity(dolphin);
                 }
-                dolphin = new Dolphin(randXDolphin, randYDolphin, Gender.Female);
-                world.AddEntity(dolphin);
-            }
-
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(8); i++)
-            {
-                int randXRock = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYRock = RandomHolder.GetInstance().Random.Next(1, 15);
-                Rock rock = new Rock(randXRock, randYRock);
-                world.AddEntity(rock);
+                else
+                {
+                    var dolphinBuilder = ((RabbitBuilder)builderProvider.GetBuilder(typeof(Rabbit)))
+                                    .SetCoordinates(randXDolphin, randYDolphin)
+                                    .SetGender(Gender.Female);
+                    var dolphin = dolphinBuilder.Build();
+                    world.AddEntity(dolphin);
+                }
             }
 
             for (int i = 0; i < RandomHolder.GetInstance().Random.Next(world.XWorldMax * world.YWorldMax * 4); i++)
