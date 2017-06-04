@@ -10,8 +10,6 @@ namespace NatureSimulationGen2.Builder
 {
     public class DolphinBuilder : AnimalBuilder, IEntityBuilder
     {
-        private bool predator = true;
-
         public override Entity Build()
         {
             var dolphin = new Dolphin(this.x, this.y, this.gender);

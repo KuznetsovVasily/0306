@@ -10,12 +10,6 @@ namespace NatureSimulationGen2.Builder
 {
     public class RabbitBuilder : AnimalBuilder, IEntityBuilder
     {
-        private int x;
-        private int y;
-
-        private bool predator = true;
-
-
         public override Entity Build()
         {
             var rabbit = new Rabbit(this.x, this.y, this.gender);
