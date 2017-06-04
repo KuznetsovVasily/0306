@@ -1,6 +1,7 @@
 ﻿using NatureSimulationGen2.Animal;
 using NatureSimulationGen2.AquaAnimal;
 using NatureSimulationGen2.Barrier;
+using NatureSimulationGen2.Builder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace NatureSimulationGen2.Global.Initialize
             world.AddEntity(rabbizt);
             Dolphin dolpz = new Dolphin(3, 3, Gender.Male);
             world.AddEntity(dolpz);
-            var owlBuilder = ((OwlBuilder)builderProvider.GetBuilder(typeof(Owl)))
+            var owlBuilder = ((LikeOwlBuilder)builderProvider.GetBuilder(typeof(Owl)))
                 .SetCoordinates(RandomHolder.GetInstance().Random.Next(1, world.XWorldMax), RandomHolder.GetInstance().Random.Next(1, world.YWorldMax))
                 .SetGender(Gender.Female);
             var owl = owlBuilder

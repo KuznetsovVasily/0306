@@ -1,6 +1,7 @@
 ﻿using NatureSimulationGen2.Animal;
 using NatureSimulationGen2.AquaAnimal;
 using NatureSimulationGen2.Barrier;
+using NatureSimulationGen2.Builder;
 using NatureSimulationGen2.Plant;
 using System;
 using System.Collections.Generic;
@@ -21,18 +22,27 @@ namespace NatureSimulationGen2.Global.Initialize
                 CreateWater(world);
             }
 
-            for (int i = 0; i < RandomHolder.GetInstance().Random.Next(world.XWorldMax * world.YWorldMax); i++)
+            for (int i = 0; i < 5; i++)
             {
-                int randXOwl = RandomHolder.GetInstance().Random.Next(1, 15);
-                int randYOwl = RandomHolder.GetInstance().Random.Next(1, 15);
-                Owl owl;
-                if (RandomHolder.GetInstance().Random.Next(0, 1) == 1)
+                int randXOwl = RandomHolder.GetInstance().Random.Next(1, world.XWorldMax);
+                int randYOwl = RandomHolder.GetInstance().Random.Next(1, world.YWorldMax);
+                if (RandomHolder.GetInstance().Random.Next(0, 2) == 1)
                 {
-                    owl = new Owl(randXOwl, randYOwl, Gender.Male);
+                    var owlBuilder = ((LikeOwlBuilder)builderProvider.GetBuilder(typeof(Owl)))
+                                    .SetCoordinates(randXOwl, randYOwl)
+                                    .SetGender(Gender.Male);
+                    var owl = owlBuilder.Build();
                     world.AddEntity(owl);
                 }
-                owl = new Owl(randXOwl, randYOwl, Gender.Female);
-                world.AddEntity(owl);
+                else
+                {
+                    var owlBuilder = ((LikeOwlBuilder)builderProvider.GetBuilder(typeof(Owl)))
+                                    .SetCoordinates(randXOwl, randYOwl)
+                                    .SetGender(Gender.Female);
+                    var owl = owlBuilder.Build();
+                    world.AddEntity(owl);
+                }
+            
             }
 
             for (int i = 0; i < RandomHolder.GetInstance().Random.Next(world.XWorldMax * world.YWorldMax / 3); i++)

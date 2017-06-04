@@ -8,16 +8,57 @@ using NatureSimulationGen2.Plant;
 
 namespace NatureSimulationGen2.Animal
 {
-    public class Owl : Animal, IFlyingCreature
+    public class Owl : Animal
     {
         protected static int RandomDelta { get; set; }
         protected int Timer { get; set; }
         public bool Predator { get; set; }
-
         public Owl(int x, int y, Gender gender = Gender.Male, bool predator = true)
             : base(x, y, gender)
         {
             Predator = predator;
+        }
+        public override List<SurfaceType> GetSurface()
+        {
+            return new List<SurfaceType>() { Global.SurfaceType.Ground, Global.SurfaceType.Water };
+        }
+        protected override int GetSpeed()
+        {
+            return 1;
+        }
+        protected override int GetHealth()
+        {
+            return this.Health;
+        }
+
+        protected override Gender GetGender()
+        {
+            return this.Gender;
+        }
+
+        public void SetHealth(int health)
+        {
+            this.Health = health;
+        }
+
+        public void SetGender(Gender gender)
+        {
+            this.Gender = gender;
+        }
+
+        protected override bool GetEdibility()
+        {
+            return false;
+        }
+
+        protected override int GetPregnantTimer()
+        {
+            return 0;
+        }
+
+        protected override bool GetIsVegan()
+        {
+            return false;
         }
 
         public override Intention RequestIntention(World world)
@@ -48,43 +89,6 @@ namespace NatureSimulationGen2.Animal
                 return new Intention { DeltaX = 0, DeltaY = (RandomDelta * Speed) };
             }
             return new Intention { DeltaX = (RandomDelta * Speed), DeltaY = 0 };
-        }
-
-        public void Move()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<SurfaceType> GetSurface()
-        {
-            return new List<SurfaceType>() {Global.SurfaceType.Ground, Global.SurfaceType.Water};
-        }
-        protected override int GetSpeed()
-        {
-            return 1;
-        }
-        protected override int GetHealth()
-        {
-            return this.Health;
-        }
-        public void SetHealth(int health)
-        {
-            this.Health = health;
-        }
-
-        protected override bool GetEdibility()
-        {
-            return false;
-        }
-
-        protected override int GetPregnantTimer()
-        {
-            return 0;
-        }
-
-        protected override bool GetIsVegan()
-        {
-            return false;
         }
     }
 }

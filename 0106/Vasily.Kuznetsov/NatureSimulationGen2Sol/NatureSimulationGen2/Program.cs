@@ -23,7 +23,7 @@ namespace NatureSimulationGen2
            .Register(typeof(Owl), new LikeOwlBuilder());
            
             World world = new World(15, 15, builderProvider);
-            world = new TestWorldInitializer().InitializeWorld(world, builderProvider);
+            //world = new TestWorldInitializer().InitializeWorld(world, builderProvider);
             world = new ManualInitializer().InitializeWorld(world, builderProvider);
 
 
@@ -69,7 +69,7 @@ namespace NatureSimulationGen2
             //            world.UpkeepTurn();
             //            world.Turn();
 
-        
+
 
             //            //Owl will move in a random Direction
             //            if (owl.X == 7 && owl.Y == 4)

@@ -1,4 +1,4 @@
-﻿using NatureSimulationGen2.Animal;
+﻿using NatureSimulationGen2.AquaAnimal;
 using NatureSimulationGen2.Global;
 using System;
 using System.Collections.Generic;
@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace NatureSimulationGen2.Builder
 {
-    public class LikeOwlBuilder : AnimalBuilder, IEntityBuilder
+    public class DolphinBuilder : AnimalBuilder, IEntityBuilder
     {
         private bool predator = true;
 
         public override Entity Build()
         {
-            var owl = new Owl(this.x, this.y, this.gender, predator);
-            owl.SetHealth(this.health);
-            owl.SetGender(this.gender);
-            return owl;
+            var dolphin = new Dolphin(this.x, this.y, this.gender);
+            dolphin.SetHealth(this.health);
+            dolphin.SetGender(this.gender);
+            return dolphin;
         }
     }
 }

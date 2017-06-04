@@ -6,7 +6,7 @@ using NatureSimulationGen2.Global;
 
 namespace NatureSimulationGen2.AquaAnimal
 {
-    public class Dolphin : Animal.Animal, IAquaCreature
+    public class Dolphin : Animal.Animal
     {
         protected static int RandomDelta { get; set; }
         protected int Timer { get; set; }
@@ -14,6 +14,52 @@ namespace NatureSimulationGen2.AquaAnimal
             : base(x, y, gender)
         {
         }
+
+        public override List<SurfaceType> GetSurface()
+        {
+            return new List<SurfaceType>() { Global.SurfaceType.Water };
+        }
+
+        protected override int GetSpeed()
+        {
+            return 1;
+        }
+
+        protected override int GetHealth()
+        {
+            return 5;
+        }
+
+        protected override bool GetEdibility()
+        {
+            return false;
+        }
+
+        protected override int GetPregnantTimer()
+        {
+            return 0;
+        }
+
+        protected override bool GetIsVegan()
+        {
+            return true;
+        }
+
+        protected override Gender GetGender()
+        {
+            return this.Gender;
+        }
+
+        public void SetHealth(int health)
+        {
+            this.Health = health;
+        }
+
+        public void SetGender(Gender gender)
+        {
+            this.Gender = gender;
+        }
+
         public override Intention RequestIntention(World world)
         {
             Health--;
@@ -56,40 +102,6 @@ namespace NatureSimulationGen2.AquaAnimal
                 return new Intention { DeltaX = 0, DeltaY = (RandomDelta * Speed) };
             }
             return new Intention { DeltaX = (RandomDelta * Speed), DeltaY = 0 };
-        }
-
-        public void Move()
-        {
-            throw new NotImplementedException();
-        }
-        public override List<SurfaceType> GetSurface()
-        {
-            return new List<SurfaceType>() { Global.SurfaceType.Water };
-        }
-
-        protected override int GetSpeed()
-        {
-            return 1;
-        }
-
-        protected override int GetHealth()
-        {
-            return 5;
-        }
-
-        protected override bool GetEdibility()
-        {
-            return false;
-        }
-
-        protected override int GetPregnantTimer()
-        {
-            return 0;
-        }
-
-        protected override bool GetIsVegan()
-        {
-            return true;
         }
     }
 }

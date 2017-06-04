@@ -51,10 +51,12 @@
     <Compile Include="Barrier\Rock.cs" />
     <Compile Include="Builder\AnimalBuilder.cs" />
     <Compile Include="Builder\BuilderProvider.cs" />
+    <Compile Include="Builder\DolphinBuilder.cs" />
     <Compile Include="Builder\Exception\BuilderAlreadyRegisteredException.cs" />
     <Compile Include="Builder\Exception\BuilderNotFoundException.cs" />
     <Compile Include="Builder\IEntityBuilder.cs" />
     <Compile Include="Builder\LikeOwlBuilder.cs" />
+    <Compile Include="Builder\RabbitBuilder.cs" />
     <Compile Include="Global\Gender.cs" />
     <Compile Include="Global\IAquaCreature.cs" />
     <Compile Include="Global\IBarrier.cs" />

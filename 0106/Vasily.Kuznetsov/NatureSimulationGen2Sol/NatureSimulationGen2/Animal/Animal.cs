@@ -14,10 +14,10 @@ namespace NatureSimulationGen2.Animal
         public Gender Gender { get; set; }
         public int PregnantTimer { get; set; }
         public bool IsVegan { get; set; }
-        protected Animal(int x, int y, Gender gender = Gender.Male)
+        protected Animal(int x, int y, Gender gender)
             : base(x, y)
         {
-            Gender = gender;
+            Gender = GetGender();
             Speed = GetSpeed();
             Health = GetHealth();
             IsEatable = GetEdibility();
@@ -29,6 +29,7 @@ namespace NatureSimulationGen2.Animal
         protected abstract bool GetEdibility();
         protected abstract int GetPregnantTimer();
         protected abstract bool GetIsVegan();
+        protected abstract Gender GetGender();
 
         public override bool GetBarrier()
         {

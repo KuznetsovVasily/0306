@@ -9,11 +9,12 @@ using NatureSimulationGen2.Plant;
 
 namespace NatureSimulationGen2.Animal
 {
-    public class Rabbit : Animal, IGroundCreature
+    public class Rabbit : Animal
     {
         protected static int RandomDelta { get; set; }
         protected int Timer { get; set; }
-        public Rabbit(int x, int y, Gender gender)
+        
+        public Rabbit(int x, int y, Gender gender, bool isVegan = true)
             :base(x, y, gender)
         {
         }
@@ -48,15 +49,25 @@ namespace NatureSimulationGen2.Animal
             return true;
         }
 
-        public void Move()
+
+        protected override Gender GetGender()
         {
-            throw new NotImplementedException();
+            return this.Gender;
         }
 
+        public void SetHealth(int health)
+        {
+            this.Health = health;
+        }
+
+        public void SetGender(Gender gender)
+        {
+            this.Gender = gender;
+        }
+       
         public override Intention RequestIntention(World world)
         {
             Health--;
-
             var objectsAtTheSamePoint = world.GetObjectsAt(X, Y).Where(e => !e.Equals(this));
             if (Timer % 3 == 0 && objectsAtTheSamePoint is Plant.Plant)
             {
@@ -72,7 +83,6 @@ namespace NatureSimulationGen2.Animal
             {
                 RandomDelta = RandomHolder.GetInstance().Random.Next(-1, 2);
             }
-
             var rand = RandomHolder.GetInstance().Random.Next(2);
             if (rand == 0)
             {
