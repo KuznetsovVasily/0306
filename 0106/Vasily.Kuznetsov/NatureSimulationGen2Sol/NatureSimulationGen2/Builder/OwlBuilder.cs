@@ -1,43 +1,18 @@
 ﻿using NatureSimulationGen2.Animal;
-using NatureSimulationGen2.Builder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NatureSimulationGen2.BuilderRecorder;
+using NatureSimulationGen2.Global;
 
-namespace NatureSimulationGen2.Global.Initialize
+namespace NatureSimulationGen2.Builder
 {
-    public class OwlBuilder : IEntityBuilder
+    public class OwlBuilder : AnimalBuilder
     {
-        private int x;
-        private int y;
-        private Gender gender;
-        private int health = 5;
         private bool predator = true;
-
-        public Entity Build()
+        public override Entity Build()
         {
-            var owl = new Owl(this.x, this.y, Gender.Male, predator);
-            owl.SetHealth(this.health);
+            var owl = new Owl(X, Y, Gender, predator);
+            owl.SetHealth(Health);
+            owl.SetGender(Gender);
             return owl;
-        }
-        public OwlBuilder SetCoordinates(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-
-            return this;
-        }
-        public OwlBuilder SetGender(Gender gender)
-        {
-            this.gender = gender;
-            return this;
-        }
-        public OwlBuilder SetHealth(int health)
-        {
-            this.health = health;
-            return this;
         }
     }
 }

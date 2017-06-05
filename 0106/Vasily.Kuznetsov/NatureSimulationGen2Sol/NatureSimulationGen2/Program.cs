@@ -5,10 +5,11 @@ using System.Runtime.CompilerServices;
 using NatureSimulationGen2.Animal;
 using NatureSimulationGen2.AquaAnimal;
 using NatureSimulationGen2.Barrier;
+using NatureSimulationGen2.Builder;
 using NatureSimulationGen2.Global;
 using NatureSimulationGen2.Plant;
 using NatureSimulationGen2.Global.Initialize;
-using NatureSimulationGen2.Builder;
+using NatureSimulationGen2.BuilderRecorder;
 
 namespace NatureSimulationGen2
 {
@@ -16,15 +17,21 @@ namespace NatureSimulationGen2
     {
         static void Main(string[] args)
         {
-            BuilderProvider builderProvider = new BuilderProvider();
-            builderProvider
-           //.Register(typeof(Owl), new OwlBuilder())
-           //.Register(typeof(Rabbit), new RabbitBuilder()
-           .Register(typeof(Owl), new LikeOwlBuilder());
-           
-            World world = new World(15, 15, builderProvider);
-            //world = new TestWorldInitializer().InitializeWorld(world, builderProvider);
-            world = new ManualInitializer().InitializeWorld(world, builderProvider);
+            Builder.BuilderRecorder builder = new Builder.BuilderRecorder();
+            builder
+           .Register(typeof(Rabbit), new RabbitBuilder())
+           .Register(typeof(Dolphin), new DolphinBuilder())
+           .Register(typeof(Owl), new OwlBuilder());
+
+            World world = new World(15, 15, builder);
+            world = new ManualInitializer().InitializeWorld(world, builder);
+
+            for (int i = 0; i < 99; i++)
+            {
+                world.PreTurn();
+                world.Turn();
+            }
+            Console.ReadLine();
 
 
             //            //I can get type on world with coord 2.2
@@ -195,7 +202,7 @@ namespace NatureSimulationGen2
             //                world.UpkeepTurn();
             //                world.Turn();
 
-            //                if (rabbit.X > world.XWorldMax || rabbit.X < 1 || rabbit.Y > world.YWorldMax || rabbit.Y < 1)
+            //                if (rabbit.X > world.XMax || rabbit.X < 1 || rabbit.Y > world.YMax || rabbit.Y < 1)
             //                {
             //                    Console.WriteLine("Rabbit out");
             //                }

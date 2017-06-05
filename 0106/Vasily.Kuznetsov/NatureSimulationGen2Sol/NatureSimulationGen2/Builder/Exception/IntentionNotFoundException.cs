@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NatureSimulationGen2.BuilderRecorder.Exception
 {
-    public class BuilderNotFoundException : System.Exception
+    public class IntentionNotFoundException : System.Exception
     {
-        public BuilderNotFoundException(string message)
+        public IntentionNotFoundException(string message)
             : base(message)
         {
         }

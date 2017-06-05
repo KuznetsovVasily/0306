@@ -18,54 +18,35 @@ namespace NatureSimulationGen2.Animal
             :base(x, y, gender)
         {
         }
-       
-        public override List<SurfaceType> GetSurface()
+       public override List<SurfaceType> GetSurfaces()
         {
             return new List<SurfaceType> { Global.SurfaceType.Ground };
         }
-
         protected override int GetSpeed()
         {
             return 1;
         }
-
         protected override int GetHealth()
         {
             return 3;
         }
-
         protected override bool GetEdibility()
         {
             return true;
         }
-
-        protected override int GetPregnantTimer()
-        {
-            return 0;
-        }
-
         protected override bool GetIsVegan()
         {
             return true;
         }
-
-
-        protected override Gender GetGender()
-        {
-            return this.Gender;
-        }
-
         public void SetHealth(int health)
         {
             this.Health = health;
         }
-
         public void SetGender(Gender gender)
         {
             this.Gender = gender;
         }
-       
-        public override Intention RequestIntention(World world)
+       public override Intention RequestIntention(World world)
         {
             Health--;
             var objectsAtTheSamePoint = world.GetObjectsAt(X, Y).Where(e => !e.Equals(this));

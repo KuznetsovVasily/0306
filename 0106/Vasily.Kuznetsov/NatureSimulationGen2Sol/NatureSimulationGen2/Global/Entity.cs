@@ -19,7 +19,7 @@ namespace NatureSimulationGen2.Global
             IsBarrier = GetBarrier();
         }
         public abstract Intention RequestIntention(World world);
-        public abstract List<SurfaceType> GetSurface();
+        public abstract List<SurfaceType> GetSurfaces();
         public abstract bool GetBarrier();
     }
 }

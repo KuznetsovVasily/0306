@@ -17,20 +17,18 @@ namespace NatureSimulationGen2.Animal
         protected Animal(int x, int y, Gender gender)
             : base(x, y)
         {
-            Gender = GetGender();
+            Gender = gender;
             Speed = GetSpeed();
             Health = GetHealth();
             IsEatable = GetEdibility();
-            PregnantTimer = GetPregnantTimer();
             IsVegan = GetIsVegan();
+            PregnantTimer = 0;
+            Gender = gender;
         }
         protected abstract int GetSpeed();
         protected abstract int GetHealth();
         protected abstract bool GetEdibility();
-        protected abstract int GetPregnantTimer();
         protected abstract bool GetIsVegan();
-        protected abstract Gender GetGender();
-
         public override bool GetBarrier()
         {
             return false;

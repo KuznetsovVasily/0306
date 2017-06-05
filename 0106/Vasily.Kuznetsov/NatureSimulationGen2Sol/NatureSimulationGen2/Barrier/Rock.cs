@@ -14,7 +14,7 @@ namespace NatureSimulationGen2.Barrier
             : base(x, y)
         {
         }
-        public override List<SurfaceType> GetSurface()
+        public override List<SurfaceType> GetSurfaces()
         {
             return new List<SurfaceType> { Global.SurfaceType.Ground, Global.SurfaceType.Water };
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NatureSimulationGen2.Builder.Exception
+namespace NatureSimulationGen2.BuilderRecorder.Exception
 {
     public class BuilderAlreadyRegisteredException : System.Exception
     {

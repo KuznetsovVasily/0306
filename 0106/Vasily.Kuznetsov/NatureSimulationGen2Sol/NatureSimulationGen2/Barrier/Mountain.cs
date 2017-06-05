@@ -13,11 +13,10 @@ namespace NatureSimulationGen2.Barrier
         {
             return new Intention { DeltaX = 0, DeltaY = 0 };
         }
-        public override List<SurfaceType> GetSurface()
+        public override List<SurfaceType> GetSurfaces()
         {
             return new List<SurfaceType> { Global.SurfaceType.Ground, Global.SurfaceType.Water };
         }
-
         public override bool GetBarrier()
         {
             return true;

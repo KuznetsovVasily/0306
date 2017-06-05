@@ -3,36 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NatureSimulationGen2.Builder;
 using NatureSimulationGen2.Global;
 
 
-namespace NatureSimulationGen2.Builder
+namespace NatureSimulationGen2.BuilderRecorder
 {
     public abstract class AnimalBuilder : IEntityBuilder
     {
-        protected int x;
-        protected int y;
-        protected Gender gender;
-        protected bool isEatable;
-        protected bool isVegan;
-        protected int pregnantTimer = 0;
-        protected int speed = 1;
-        protected int health = 3;
+        protected int X;
+        protected int Y;
+        protected Gender Gender;
+        protected bool IsEatable;
+        protected bool IsVegan;
+        protected int PregnantTimer = 0;
+        protected int Speed = 1;
+        protected int Health = 3;
         public abstract Entity Build();
         public virtual AnimalBuilder SetCoordinates(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
             return this;
         }
+        //review: зачем virtual? И можно сделать это свойством
         public virtual AnimalBuilder SetGender(Gender gender)
         {
-            this.gender = gender;
+            Gender = gender;
             return this;
         }
         public virtual AnimalBuilder SetHealth(int health)
         {
-            this.health = health;
+            Health = health;
             return this;
         }
     }

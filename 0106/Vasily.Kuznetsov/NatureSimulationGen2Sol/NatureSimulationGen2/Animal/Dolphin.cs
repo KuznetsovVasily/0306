@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using NatureSimulationGen2.AquaAnimal;
 using NatureSimulationGen2.Global;
-using NatureSimulationGen2.Plant;
 
-namespace NatureSimulationGen2.Animal
+namespace NatureSimulationGen2.AquaAnimal
 {
-    public class Owl : Animal
+    public class Dolphin : Animal.Animal
     {
         protected static int RandomDelta { get; set; }
         protected int Timer { get; set; }
-        public bool Predator { get; set; }
-        public Owl(int x, int y, Gender gender = Gender.Male, bool predator = true)
+        public Dolphin(int x, int y, Gender gender)
             : base(x, y, gender)
         {
-            Predator = predator;
         }
         public override List<SurfaceType> GetSurfaces()
         {
-            return new List<SurfaceType> { Global.SurfaceType.Ground, Global.SurfaceType.Water };
+            return new List<SurfaceType> { Global.SurfaceType.Water };
         }
         protected override int GetSpeed()
         {
@@ -28,9 +24,16 @@ namespace NatureSimulationGen2.Animal
         }
         protected override int GetHealth()
         {
-            return this.Health;
+            return 5;
         }
-
+        protected override bool GetEdibility()
+        {
+            return false;
+        }
+        protected override bool GetIsVegan()
+        {
+            return true;
+        }
         public void SetHealth(int health)
         {
             this.Health = health;
@@ -39,25 +42,31 @@ namespace NatureSimulationGen2.Animal
         {
             this.Gender = gender;
         }
-        protected override bool GetEdibility()
-        {
-            return false;
-        }
-        protected override bool GetIsVegan()
-        {
-            return false;
-        }
         public override Intention RequestIntention(World world)
         {
             Health--;
             var objectsAtTheSamePoint = world.GetObjectsAt(X, Y).Where(e => !e.Equals(this));
-            if (Timer % 3 == 0 && objectsAtTheSamePoint is Animal)
+            if (Timer % 2 == 0)
             {
-                if (objectsAtTheSamePoint.Any(e => ((Animal)e).IsEatable = true))             
+                if (objectsAtTheSamePoint.Any(e => e.GetType() == typeof(Dolphin) && (Gender != ((Dolphin)e).Gender)))
                 {
                     Timer++;
-                    Health = Health + RandomHolder.GetInstance().Random.Next(6);
-                    ((Animal) objectsAtTheSamePoint.FirstOrDefault()).Health = 0;
+                    if (Gender == Gender.Female && PregnantTimer > 0)
+                    {
+                        PregnantTimer++;
+                        if (PregnantTimer == 4)
+                        {
+                            Random randomForGender = new Random();
+                            if (randomForGender.Next(2) == 1)
+                            {
+                                Dolphin dolphinMale = new Dolphin(X, Y, Gender.Female);
+                                world.AddEntity(dolphinMale);
+                            }
+                            Dolphin dolphinFemale = new Dolphin(X, Y, Gender.Male);
+                            world.AddEntity(dolphinFemale);
+                            PregnantTimer = 0;
+                        }
+                    }
                     return new Intention { DeltaX = 0, DeltaY = 0 };
                 }
             }
@@ -75,5 +84,3 @@ namespace NatureSimulationGen2.Animal
         }
     }
 }
-
-

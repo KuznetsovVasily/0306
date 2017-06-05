@@ -10,9 +10,7 @@ namespace NatureSimulationGen2.Global
     public class RandomHolder
     {
         private static RandomHolder _instance;
-
         public Random Random { get; set; }
-
         public RandomHolder()
         {
             Random = new Random((int) DateTime.Now.Ticks);

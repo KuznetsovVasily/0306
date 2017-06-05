@@ -6,6 +6,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using NatureSimulationGen2.AquaAnimal;
+using NatureSimulationGen2.BuilderRecorder;
+using NatureSimulationGen2.BuilderRecorder.Exception;
 using NatureSimulationGen2.Plant;
 
 
@@ -13,44 +15,38 @@ namespace NatureSimulationGen2.Global
 {
     public class World
     {
-        public int XWorldMax { get; set; }
-        public int YWorldMax { get; set; }
-        private BuilderProvider builderProvider;
-
-        public World(int xWorldMax, int yWorldMax, BuilderProvider builderProvider)
+        public int XMax { get; set; }
+        public int YMax { get; set; }
+        private Builder.BuilderRecorder _builderRecorder;
+        public World(int xMax, int yMax, Builder.BuilderRecorder builderRecorder)
         {
-            XWorldMax = xWorldMax - 1;
-            YWorldMax = yWorldMax - 1;
-            this.builderProvider = builderProvider;
+            XMax = xMax - 1;
+            YMax = yMax - 1;
+            _builderRecorder = builderRecorder;
         }
-
-       
-        
-
         public List<Entity> EntityList = new List<Entity>();
-        public Dictionary<Tuple<int, int>, SurfaceType> groundTypes = new Dictionary<Tuple<int, int>, SurfaceType>();
+        public readonly Dictionary<Tuple<int, int>, SurfaceType> _groundTypes = new Dictionary<Tuple<int, int>, SurfaceType>();
         public SurfaceType GetSurfaceTypeAt(int x, int y)
         {
-            if (groundTypes.ContainsKey(Tuple.Create(x, y)))
+            if (_groundTypes.ContainsKey(Tuple.Create(x, y)))
             {
-               return groundTypes[Tuple.Create(x, y)];
+                return _groundTypes[Tuple.Create(x, y)];
             }
             return SurfaceType.Ground;
         }
-
         public void SetSurfaceType(SurfaceType surfaceType, int x, int y)
         {
-            groundTypes[Tuple.Create(x, y)] = surfaceType;
+            _groundTypes[Tuple.Create(x, y)] = surfaceType;
         }
-
         public void AddEntity(Entity entity)
         {
-            if (!entity.GetSurface().Contains(SurfaceType.Water) &&
-                groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)) ||
-                !entity.GetSurface().Contains(SurfaceType.Ground) &&
-                !groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)))
+            //review: _groundTypes.ContainsKey вводит в заблуждение, а есть понятный GetSurfaceTypeAt
+            //review: зачем проверять каждый случай отдельно? почему не проверить, что entity.GetSurfaces().Contains(GetSurfaceTypeAt(X, Y))?
+            if (!entity.GetSurfaces().Contains(SurfaceType.Water) &&
+                _groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)) ||
+                !entity.GetSurfaces().Contains(SurfaceType.Ground) &&
+                !_groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)))
             {
-                //TODO: FOR LOG
                 Console.WriteLine("Impossible action");
             }
             else
@@ -58,37 +54,22 @@ namespace NatureSimulationGen2.Global
                 EntityList.Add(entity);
             }
         }
-
-        public void BorderInitialize(World world)
-        {
-            for (int i = 0; i < world.XWorldMax; i++)
-            {
-                for (int j = 0; j < world.YWorldMax; j++)
-                {
-                    if (i == 0 || i == world.XWorldMax || j == 0 || j == world.YWorldMax)
-                    {
-                        world.AddEntity(new Mountain(i, j));
-                    }
-                }
-            }
-        }
-      
         public IEnumerable<Entity> GetObjectsAt(int x, int y)
         {
             return EntityList.Where(entity => entity.X == x && entity.Y == y);
         }
 
-        public void UpkeepTurn()
+        public void PreTurn()
         {
             EntityList = (from element in EntityList
-                          where (element is Animal.Animal)
+                          where (element is Animal.Animal) //review: OfType <Animal>
                           select element).ToList();
-            EntityList.RemoveAll(x => (((Animal.Animal) x).Health) <= 1);
+            EntityList.RemoveAll(x => (((Animal.Animal)x).Health) <= 1);
         }
-
         public void Turn()
         {
             {
+                //review: почему не foreach?
                 for (int i = 0; i < EntityList.Count; i++)
                 {
                     var entityIntention = EntityList[i].RequestIntention(this);
@@ -96,10 +77,27 @@ namespace NatureSimulationGen2.Global
                     var newYCoord = EntityList[i].Y + entityIntention.DeltaY;
                     var objectsAtTheNewPoint = GetObjectsAt(newXCoord, newYCoord);
 
-                    if (EntityList[i].GetType() == typeof(Rabbit) && objectsAtTheNewPoint.Any(e => GetType() != typeof(Rock) 
-                    && !groundTypes.ContainsKey(Tuple.Create(newXCoord, newYCoord))))
+                    //review: зачем нам списки существ, которые могут двигаться определеным образом? надо работать с текущим существом (переменной цикла)
+                    IEnumerable<Animal.Animal> canJustSwimAnimals =
+                        EntityList.OfType<Animal.Animal>()
+                            .Where(a => a.SurfaceType.Contains(SurfaceType.Water) &&
+                                !a.SurfaceType.Contains(SurfaceType.Ground));
+                    IEnumerable<Animal.Animal> canJustWalkAnimals =
+                        EntityList.OfType<Animal.Animal>()
+                            .Where(a => a.SurfaceType.Contains(SurfaceType.Ground) &&
+                                       !a.SurfaceType.Contains(SurfaceType.Water));
+                    IEnumerable<Animal.Animal> canWalkAndSwimAnimals =
+                        EntityList.OfType<Animal.Animal>()
+                            .Where(a => a.SurfaceType.Contains(SurfaceType.Water) &&
+                                        a.SurfaceType.Contains(SurfaceType.Ground));
+                    IEnumerable<Animal.Animal> canFlyAnimals =
+                        EntityList.OfType<Animal.Animal>()
+                            .Where(a => a.SurfaceType.Contains(SurfaceType.Ground) &&
+                                        a.SurfaceType.Contains(SurfaceType.Water));
+
+                    if (canJustWalkAnimals != null && (!objectsAtTheNewPoint.Any(e => e is IBarrier) && !_groundTypes.ContainsKey(Tuple.Create(newXCoord, newYCoord))))
                     {
-                        if ((newXCoord > XWorldMax) || newYCoord > (YWorldMax) || (newXCoord < 1) || (newYCoord < 1))
+                        if ((newXCoord > XMax) || newYCoord > (YMax) || (newXCoord < 1) || (newYCoord < 1))
                         {
                             EntityList[i].X = EntityList[i].X;
                             EntityList[i].Y = EntityList[i].Y;
@@ -108,27 +106,28 @@ namespace NatureSimulationGen2.Global
                         {
                             EntityList[i].X += entityIntention.DeltaX;
                             EntityList[i].Y += entityIntention.DeltaY;
-                            
+
                         }
                     }
-                    
-                    else if (EntityList[i].GetType() == typeof(Dolphin) && groundTypes.ContainsKey(Tuple.Create(newXCoord, newYCoord)))
+                    else if (canJustSwimAnimals != null && _groundTypes.ContainsKey(Tuple.Create(newXCoord, newYCoord)))
                     {
                         EntityList[i].X += entityIntention.DeltaX;
                         EntityList[i].Y += entityIntention.DeltaY;
-                        
+
                     }
-                    
-                    
-                    else if (EntityList[i].GetType() == typeof(Owl) && objectsAtTheNewPoint.Any(e => e.GetType() != typeof(Mountain)))
+                    else if (canFlyAnimals != null)
                     {
                         EntityList[i].X += entityIntention.DeltaX;
                         EntityList[i].Y += entityIntention.DeltaY;
-                        
                     }
                 }
             }
         }
+
+
+
+
+
 
         //Test
         public int NumberOfEntity
