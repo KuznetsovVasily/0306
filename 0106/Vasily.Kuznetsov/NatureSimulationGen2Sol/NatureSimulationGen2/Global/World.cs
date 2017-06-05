@@ -25,7 +25,18 @@ namespace NatureSimulationGen2.Global
             _builderRecorder = builderRecorder;
         }
         public List<Entity> EntityList = new List<Entity>();
-        public readonly Dictionary<Tuple<int, int>, SurfaceType> _groundTypes = new Dictionary<Tuple<int, int>, SurfaceType>();
+        private readonly Dictionary<Tuple<int, int>, SurfaceType> _groundTypes = new Dictionary<Tuple<int, int>, SurfaceType>();
+
+        public bool GroundTypesContainsKey(int x, int y)
+        {
+            return _groundTypes.ContainsKey(Tuple.Create(x, y));
+        }
+
+        public int GetGroundTypesCount()
+        {
+            return _groundTypes.Count;
+        }
+
         public SurfaceType GetSurfaceTypeAt(int x, int y)
         {
             if (_groundTypes.ContainsKey(Tuple.Create(x, y)))
@@ -40,19 +51,26 @@ namespace NatureSimulationGen2.Global
         }
         public void AddEntity(Entity entity)
         {
-            //review: _groundTypes.ContainsKey вводит в заблуждение, а есть понятный GetSurfaceTypeAt
-            //review: зачем проверять каждый случай отдельно? почему не проверить, что entity.GetSurfaces().Contains(GetSurfaceTypeAt(X, Y))?
-            if (!entity.GetSurfaces().Contains(SurfaceType.Water) &&
-                _groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)) ||
-                !entity.GetSurfaces().Contains(SurfaceType.Ground) &&
-                !_groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)))
+            if (entity.GetSurfaces().Contains(GetSurfaceTypeAt(entity.X, entity.Y)))
             {
-                Console.WriteLine("Impossible action");
+                Console.WriteLine("Impossible action");   
             }
             else
             {
                 EntityList.Add(entity);
             }
+
+            //if (!entity.GetSurfaces().Contains(SurfaceType.Water) &&
+            //    _groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)) ||
+            //    !entity.GetSurfaces().Contains(SurfaceType.Ground) &&
+            //    !_groundTypes.ContainsKey(Tuple.Create(entity.X, entity.Y)))
+            //{
+            //    Console.WriteLine("Impossible action");
+            //}
+            //else
+            //{
+            //    EntityList.Add(entity);
+            //}
         }
         public IEnumerable<Entity> GetObjectsAt(int x, int y)
         {

@@ -20,7 +20,7 @@ namespace NatureSimulationGen2.Global.Initialize
             BorderInitialize(world);
             CreateWater(world, 9);
             var waterPerc = (world.XMax * world.YMax * 45 / 100);
-            while (world._groundTypes.Count < waterPerc)
+            while (world.GetGroundTypesCount() < waterPerc)
             {
                 CreateWater(world);
             }
@@ -94,7 +94,7 @@ namespace NatureSimulationGen2.Global.Initialize
                 int randXTree = RandomHolder.GetInstance().Random.Next(1, 15);
                 int randYTree = RandomHolder.GetInstance().Random.Next(1, 15);
 
-                if (!world.groundTypes.ContainsKey(Tuple.Create(randXTree, randYTree)) && world.EntityList.Any(e => e.GetType() == typeof(Mountain)))
+                if (!world.GroundTypesContainsKey(randXTree, randYTree) && world.EntityList.Any(e => e.GetType() == typeof(Mountain)))
                 {
                     Tree tree = new Tree(randXTree, randYTree);
                     world.AddEntity(tree);
